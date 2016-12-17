@@ -5,9 +5,10 @@
 }
 body {
    margin: 10px;
+   font-family: "Segoe UI";
 }
 h2 {
-   margin-bottom: 3px;
+   margin-bottom: 4px;
 }
 table {
    border-collapse: collapse;

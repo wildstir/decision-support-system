@@ -1,5 +1,7 @@
 //Входные данные
-var names_firms  = [ "Head", "Gnu", "Nitro", "Forum", "Ride"];
+var names_firms  = [ "Head", "Gnu", "Nitro", "Forum", "Ride" ];
+var criteries    = [ "Наименьшая Цена", "Жёсткость", "Форма", "Стиль", "Структура" ];
+var vesovoi_koef = [ 0.1, 0.3, 0.3, 0.1, 0.2 ];
 var allbo        = [
                    [ [0, 0, 1, 1, 1], [1, 0, 1, 1, 1], [0, 0, 0, 0, 0], [0, 0, 1, 0, 0], [0, 0, 1, 1, 0] ],
                    [ [0, 1, 0, 0, 1], [0, 0, 0, 0, 0], [1, 1, 0, 0, 1], [1, 1, 1, 0, 1], [0, 1, 0, 0, 0] ],
@@ -7,27 +9,23 @@ var allbo        = [
                    [ [0, 1, 0, 0, 0], [0, 0, 0, 0, 0], [1, 1, 0, 0, 1], [1, 1, 1, 0, 1], [1, 1, 0, 0, 0] ],
                    [ [0, 0, 0, 0, 0], [1, 0, 0, 0, 0], [1, 1, 0, 1, 1], [1, 1, 0, 0, 1], [1, 1, 0, 0, 0] ]
                    ];
-var criteries    = [ "Наименьшая Цена", "Жёсткость", "Форма", "Стиль", "Структура" ];
-var vesovoi_koef = [ 0.1, 0.3, 0.3, 0.1, 0.2 ];
 
 //Остальные переменные
 var tmpCont      = "";
 var bo_vesovoi   = [];
 var kmax         = [];
 var tmpar        = [];
-var tmpcount, tmpvar, hr, nr, er;
+var tmpcount, tmpvar, vfov, hr, nr, er;
 
 window.onload = function()
 {
-   for (var i = 0; i < 2; i++) //Построение масива с результами турнирного механизма
+//Инициализация масива с результами турнирного механизма
+   for (var i = 0; i < criteries.length; i++)
    {
       bo_vesovoi[i] = [];
-      for (var ii = 0; ii < criteries.length; ii++)
-      {
-         bo_vesovoi[i][ii] = [];
-      }
    }
-   for (var i = 0; i < allbo.length; i++) //Построение массива с к-максимальными
+//Инициализация массива с к-максимальными
+   for (var i = 0; i < allbo.length; i++)
    {
       kmax[i] = [];
       for (var ii = 0; ii < allbo[i].length; ii++)
@@ -35,12 +33,13 @@ window.onload = function()
          kmax[i][ii] = [];
       }
    }
-   for (var i = 0; i < criteries.length; i++) //Добавление всех критериев на страницу
+//Добавление всех критериев на страницу
+   for (var i = 0; i < criteries.length; i++)
    {
       document.getElementById("in").innerHTML += "<h2>" + criteries[i] + "</h2><div class='cont'></div><br />";
    }
-   
-   for (var i = 0; i < allbo.length; i++) //Добавления всех первоначальных данных на страницу
+//Вывод первоначальных данных на страницу
+   for (var i = 0; i < vesovoi_koef.length; i++)
    {
       tmpCont += "<table><tr><th></th>";
       for (var j = 0; j < names_firms.length; j++)
@@ -62,7 +61,8 @@ window.onload = function()
       document.getElementsByClassName("cont")[i].innerHTML = tmpCont;
       tmpCont = "";
    }
-   
+
+//Вывод весовых коэфицентов на страницу
    tmpCont = "<table>";
    for (var i = 0; i < vesovoi_koef.length; i++)
    {
@@ -70,27 +70,30 @@ window.onload = function()
    }
    tmpCont += "</table>";
    document.getElementById("ves").innerHTML = tmpCont;
-   
+
+//Вывод механизма доминирования
    dominir();
    tmpCont = "<table>";
-   for (var i = 0; i < names_firms.length; i++)
+   for (var i = 0; i < criteries.length; i++)
    {
       tmpCont += "<tr><th>" + criteries[i] + "</th><th>" + names_firms[tmpar[i]] + "</th></tr>";
    }
    tmpCont += "</table>";
    document.getElementById("md").innerHTML = tmpCont;
    tmpar = [];
-   
+
+//Вывод механизма блокирования
    blockir();
    tmpCont = "<table>";
-   for (var i = 0; i < vesovoi_koef.length; i++)
+   for (var i = 0; i < criteries.length; i++)
    {
       tmpCont += "<tr><th>" + criteries[i] + "</th><th>" + names_firms[tmpar[i]] + "</th></tr>";
    }
    tmpCont += "</table>";
    document.getElementById("mb").innerHTML = tmpCont;
    tmpar = [];
-   
+
+//Вывод турнирного механизма
    tyrnir();
    tmpCont = "<table><tr><th></th>";
    for (var i = 0; i < criteries.length; i++)
@@ -98,51 +101,53 @@ window.onload = function()
       tmpCont += "<th>" + criteries[i] + "</th>";
    }
    tmpCont += "</tr>";
-   for (var i = 0; i < bo_vesovoi[0].length; i++)
+   for (var i = 0; i < names_firms.length; i++)
    {
       tmpCont += "<tr><th>" + names_firms[i] + "</th>";
-      for (var ii = 0; ii < bo_vesovoi[0][i].length; ii++)
+      for (var ii = 0; ii < criteries.length; ii++)
       {
-         tmpCont += "<td>" + bo_vesovoi[0][ii][i] + "</td>";
+         tmpCont += "<td>" + bo_vesovoi[ii][i] + "</td>";
       }
       tmpCont += "</tr>";
    }
    tmpCont += "</table>";
-   
    document.getElementById("tm").innerHTML = tmpCont;
+//Вывод турнирного механизма помноженного на весовой коэфицент
    tmpCont = "<table><tr><th></th>";
    for (var i = 0; i < criteries.length; i++)
    {
       tmpCont += "<th>" + criteries[i] + "</th>";
    }
    tmpCont += "</tr>";
-   for (var i = 0; i < bo_vesovoi[1].length; i++)
+   for (var i = 0; i < names_firms.length; i++)
    {
       tmpCont += "<tr><th>" + names_firms[i] + "</th>";
       tmpar[i] = 0;
-      for (var ii = 0; ii < bo_vesovoi[1][i].length; ii++)
+      for (var ii = 0; ii < criteries.length; ii++)
       {
-         tmpCont += "<td>" + bo_vesovoi[1][ii][i] + "</td>";
-         tmpar[i] = parseFloat((tmpar[i] + bo_vesovoi[1][ii][i]).toFixed(5));//Math.ceil((tmpar[i] + bo_vesovoi[1][ii][i])*10)/10;
+         vforv = parseFloat((bo_vesovoi[ii][i] * vesovoi_koef[ii]).toFixed(5));
+         tmpCont += "<td>" + vforv + "</td>";
+         tmpar[i] = parseFloat((tmpar[i] + vforv).toFixed(5));//Math.ceil((tmpar[i] + bo_vesovoi[ii][i])*10)/10;
       }
       tmpCont += "</tr>";
    }
    tmpCont += "</table>";
    document.getElementById("vk").innerHTML = tmpCont;
-   
+
+//Вывод суммы из турнирной таблицы помноженой на весовой коэфицент
    tmpCont = "<table>";
-   for (var i = 0; i < vesovoi_koef.length; i++)
+   for (var i = 0; i < names_firms.length; i++)
    {
       tmpCont += "<tr><th>" + names_firms[i] + "</th><th>" + tmpar[i] + "</th></tr>";
    }
    tmpCont += "</table>";
    document.getElementById("vs").innerHTML = tmpCont;
-   
+
    for (var i = 0; i < criteries.length; i++)
    {
       document.getElementById("km").innerHTML += "<h2>" + criteries[i] + "</h2><div class='k'></div><br />";
    }
-   for (var i = 0; i < kmax.length; i++)
+   for (var i = 0; i < criteries.length; i++)
    {
       tmpCont = "<table><tr><th></th><th>K1</th><th>K2</th><th>K3</th><th>K4</th></tr>";
       for (var ii = 0; ii < kmax[i].length; ii++)
@@ -160,7 +165,7 @@ window.onload = function()
 //Механизм доминирования
 function dominir()
 {
-   for (var i = 0; i < allbo.length; i++)
+   for (var i = 0; i < criteries.length; i++)
    {
       tmpvar = 0;
       for (var ii = 0; ii < allbo[i].length; ii++)
@@ -182,9 +187,9 @@ function dominir()
 //Механизм блокировки
 function blockir()
 {
-   for (var i = 0; i < allbo.length; i++)
+   for (var i = 0; i < criteries.length; i++)
    {
-      tmpvar = allbo.length;
+      tmpvar = criteries.length + 1;
       for (var ii = 0; ii < allbo[i].length; ii++)
       {
          tmpcount = 0;
@@ -201,10 +206,10 @@ function blockir()
    }
 }
 
-//Турнирный механизм
+//Турнирный механизм и дополнительно помноженный на на весовой коэфицент
 function tyrnir()
 {
-   for (var i = 0; i < allbo.length; i++)
+   for (var i = 0; i < criteries.length; i++)
    {
       for (var ii = 0; ii < allbo[i].length; ii++)
       {
@@ -223,7 +228,7 @@ function tyrnir()
                   tmpcount += 1;
                }
             }
-            
+
             if (ii != iii)
             {
                if (allbo[i][ii][iii] == 1)
@@ -243,9 +248,8 @@ function tyrnir()
                }
             }
          }
-         bo_vesovoi[0][i][ii] = tmpcount;
-         bo_vesovoi[1][i][ii] = parseFloat((tmpcount * vesovoi_koef[ii]).toFixed(5));
-         
+         bo_vesovoi[i][ii] = tmpcount;
+
          kmax[i][ii][0] = hr + nr + er;
          kmax[i][ii][1] = hr + nr;
          kmax[i][ii][2] = hr + er;
