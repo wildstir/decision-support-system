@@ -1,0 +1,67 @@
+* {
+   margin: 0px;
+   padding: 0px;
+   border: 0px;
+}
+body {
+   margin: 10px;
+   font-family: "Segoe UI";
+}
+h1 {
+   text-align: center;
+}
+h2 {
+   margin-bottom: 4px;
+}
+input {
+   padding:4px 6px 2px 6px;
+   border: 1px solid black;
+   font-size: 16px;
+}
+input[type="button"] {
+   background-color: black;
+   border: 1px solid black;
+   color: white;
+   cursor: pointer;
+}
+table {
+   border-collapse: collapse;
+}
+table td {
+   border: 1px solid black;
+   text-align: center;
+   padding: 0px 10px;
+}
+table th {
+   border: 1px solid grey;
+   padding: 0px 10px;
+}
+
+.bornone {
+   border: 0px;
+   width: 40px;
+   text-align: center;
+}
+.tabbo td {
+   padding: 1px 0px;
+}
+
+#offer {
+   width: 50px;
+   height: 50px;
+   position: fixed;
+   top: 10px;
+   right: 10px;
+}
+#itemin {
+   width: 50px;
+}
+#tabcrit {
+   margin-bottom: 10px;
+}
+#tabcrit td, #tabcrit th {
+   border: none;
+}
+#out {
+   display: none;
+}
